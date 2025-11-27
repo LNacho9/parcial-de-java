@@ -1,146 +1,135 @@
-import java.util.LinkedList;
 
-/**
- * Esta clase representa una un tren de bibliotecas que maneja una colección de libros libres.
- */
 public class Library {
     private String name;
-    static boolean archived=false;
-    private LinkedList books;
-    
-    /**
-     * Constructor para crear una biblioteca
-     * @param name El nombre de la biblioteca
-     */
+    private LinkedList<Book> books;
+    private LinkedList<Author> authors;
+
     public Library(String name) {
         this.name = name;
-        this.books = ;
+        this.books = new LinkedList<>();
+        this.authors = new LinkedList<>();
     }
-    
-    // Getters
+
     public String getName() {
         return name;
     }
-    
-    public LinkedList getBooks() {
+
+    public LinkedList<Book> getBooks() {
         return books;
     }
-    
-    // Setters
+
     public void setName(String name) {
         this.name = name;
     }
-    
-    /**
-     * Agrega un libro a la biblioteca
-     * @param book El libro a agregar
-     * @return true si se agregó exitosamente
-     */
+
     public boolean addBook(Book book) {
         if (book != null) {
-            
-            
+            books.add(book);
+            return true;
         }
-        
+        return false;
     }
-    
-    /**
-     * Elimina un libro de la biblioteca
-     * @param book El libro a eliminar
-     * @return true si se eliminó exitosamente
-     */
+
+    public boolean addAuthor(Author author) {
+        if (author != null) {
+            authors.add(author);
+            return true;
+        }
+        return false;
+    }
+
     public boolean removeBook(Book book) {
-        
+        return books.remove(book);
     }
-    
-    /**
-     * Busca un libro por ISBN
-     * @param isbn El ISBN a buscar
-     * @return El libro encontrado o null si no existe
-     */
+
     public Book findBookByIsbn(String isbn) {
-        for (int i = 0; i < XXXX; i++) {
-            
+        for (int i = 0; i < books.size(); i++) {
+            Book book = books.get(i);
+            if (book.getIsbn().equals(isbn)) {
+                return book;
+            }
         }
         return null;
     }
-    
-    /**
-     * Busca libros por descripcion (búsqueda parcial). Quiás no se usa.
-     * @param description La descripción o parte de la descripción a buscar
-     * @return Lista enlazada con los libros encontrados
-     */
-    public LinkedList findBookByDescription(String title) {
-        LinkedList foundBooks = new LinkedList();
-        foundBooks.MapReduce(books, book -> book.getTitle().contains(title), book -> foundBooks.add(book));
+
+    public LinkedList<Book> findBookByDescription(String title) {
+        LinkedList<Book> foundBooks = new LinkedList<>();
+        for (int i = 0; i < books.size(); i++) {
+            Book book = books.get(i);
+            if (book.getTitle().contains(title)) {
+                foundBooks.add(book);
+            }
+        }
         return foundBooks;
     }
-    
-    /**
-     * Busca libros por título (búsqueda parcial)
-     * @param title El título o parte del título a buscar
-     * @return Lista enlazada con los libros encontrados
-     */
-    public LinkedList findBooksByTitle(String title) {
-        LinkedList foundBooks = new LinkedList();
-        
+
+    public LinkedList<Book> findBooksByTitle(String title) {
+        LinkedList<Book> foundBooks = new LinkedList<>();
+        for (int i = 0; i < books.size(); i++) {
+            Book book = books.get(i);
+            if (book.getTitle().toLowerCase().contains(title.toLowerCase())) {
+                foundBooks.add(book);
+            }
+        }
         return foundBooks;
     }
-    
-    /**
-     * Busca libros por autor
-     * @param authorName El nombre del autor a buscar
-     * @return Lista enlazada con los libros del autor
-     */
+
     public LinkedList<Book> findBooksByAuthor(String authorName) {
-        LinkedList foundBooks = new LinkedList();
-        
+        LinkedList<Book> foundBooks = new LinkedList<>();
+        for (int i = 0; i < books.size(); i++) {
+            Book book = books.get(i);
+            if (book.getAuthor().toLowerCase().contains(authorName.toLowerCase())) {
+                foundBooks.add(book);
+            }
+        }
         return foundBooks;
     }
-    
-    /**
-     * Obtiene todos los libros disponibles para préstamo
-     * @return Lista enlazada con los libros disponibles
-     */
-    public LinkedList getAvailableBooks() {
-        LinkedList availableBooks = new LinkedList();
-        
+
+    public LinkedList<Book> getAvailableBooks() {
+        LinkedList<Book> availableBooks = new LinkedList<>();
+        for (int i = 0; i < books.size(); i++) {
+            Book book = books.get(i);
+            if (book.getAvailable()) {
+                availableBooks.add(book);
+            }
+        }
         return availableBooks;
     }
-    
-    /**
-     * Obtiene todos los libros prestados
-     * @return Lista enlazada con los libros prestados
-     */
-    public LinkedList getLoanedBooks() {
-        LinkedList loanedBooks = new LinkedList();
-        
+
+    public LinkedList<Book> getLoanedBooks() {
+        LinkedList<Book> loanedBooks = new LinkedList<>();
+        for (int i = 0; i < books.size(); i++) {
+            Book book = books.get(i);
+            if (!book.getAvailable()) {
+                loanedBooks.add(book);
+            }
+        }
         return loanedBooks;
     }
-    
-    /**
-     * Obtiene estadísticas de la biblioteca
-     * @return String con las estadísticas
-     */
+
     public String getStatistics() {
-        int totalBooks;
-        int availableBooks;
-        int loanedBooks;
-        
+        int totalBooks = books.size();
+        int availableBooks = 0;
+        int loanedBooks = 0;
+
+        for (int i = 0; i < books.size(); i++) {
+            if (books.get(i).getAvailable()) {
+                availableBooks++;
+            } else {
+                loanedBooks++;
+            }
+        }
+
         return String.format(
-            "Estadísticas de la Biblioteca:\n" +
-            "- Total de Libros: %d\n" +
-            "- Libros Disponibles: %d\n" +
-            "- Libros Prestados: %d\n",
-            totalBooks, availableBooks, loanedBooks
-        );
+                "estadísticas de la biblioteca:\n" +
+                        "- total de libros: %d\n" +
+                        "- libros disponibles: %d\n" +
+                        "- libros prestados: %d\n",
+                totalBooks, availableBooks, loanedBooks);
     }
-    
-    /**
-     * Representación legible de la biblioteca
-     * @return String con la información de la biblioteca
-     */
+
     @Override
     public String toString() {
+        return "biblioteca: " + name + " (" + books.size() + " libros)";
     }
 }
