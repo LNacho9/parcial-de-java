@@ -1,74 +1,45 @@
 public class Main {
     public static void main(String[] args) {
-        System.out.println("sistema de gestion de biblioteca");
-        System.out.println("aplicacion iniciada.\n");
+        System.out.println("iniciando pruebas...");
 
-        Library library = new Library("biblioteca central");
+        Library bib = new Library("mi biblioteca");
 
-        Book book1 = new Book("El Quijote", "978-84-376-0494-7", "Miguel de Cervantes", 1605);
-        Book book2 = new Book("Cien años de soledad", "978-84-376-0495-4", "Gabriel García Márquez", 1967);
-        Book book3 = new Book("1984", "978-84-376-0496-1", "George Orwell", 1949);
-        Book book4 = new Book("El amor en los tiempos del cólera", "978-84-376-0497-8", "Gabriel García Márquez", 1985);
+        Author a1 = new Author("garcia marquez", "colombia", 1927);
+        Book b1 = new Book("cien anios", "111", "garcia marquez", 1967);
+        Book b2 = new Book("1984", "333", "orwell", 1949);
 
-        Author author1 = new Author("Miguel de Cervantes", "Español", 1547);
-        Author author2 = new Author("Gabriel García Márquez", "Colombiano", 1927);
-        Author author3 = new Author("George Orwell", "Británico", 1903);
+        bib.addAuthor(a1);
+        bib.addBook(b1);
+        bib.addBook(b2);
 
-        System.out.println("agregando libros...");
-        library.addBook(book1);
-        library.addBook(book2);
-        library.addBook(book3);
-        library.addBook(book4);
-        System.out.println("libros agregados");
+        System.out.println("libros cargados: " + bib.getBooks().size());
 
-        System.out.println("\nagregando autores...");
-        library.addAuthor(author1);
-        library.addAuthor(author2);
-        library.addAuthor(author3);
-        System.out.println("autores agregados");
+        System.out.println("\nbuscando 'amor':");
+        LinkedList<Book> res = bib.findBooksByTitle("amor");
+        if (res.isEmpty()) System.out.println("no se encontraron libros");
 
-        System.out.println("\ninformacion de la biblioteca:");
-        System.out.println(library);
-        System.out.println("\n" + library.getStatistics());
-
-        System.out.println("\nbusqueda por titulo ('amor'):");
-        LinkedList<Book> searchResults = library.findBooksByTitle("amor");
-        for (int i = 0; i < searchResults.size(); i++) {
-            System.out.println("  - " + searchResults.get(i));
+        System.out.println("\nvalidando historial de prestamos:");
+        Book l = bib.findBookByIsbn("333");
+        
+        if (l != null) {
+            l.lend("pepe");
+            System.out.println("prestado a pepe. actual: " + l.getLastLoanUser());
+            
+            l.undoLastLoan();
+            System.out.println("deshacer prestamo. disponible: " + l.getAvailable());
+            
+            l.lend("ana");
+            System.out.println("prestado a ana. actual: " + l.getLastLoanUser());
         }
 
-        System.out.println("\nbusqueda por autor ('García Márquez'):");
-        LinkedList<Book> authorBooks = library.findBooksByAuthor("García Márquez");
-        for (int i = 0; i < authorBooks.size(); i++) {
-            System.out.println("  - " + authorBooks.get(i));
+        bib.removeBook(b1);
+        if (bib.findBookByIsbn("111") == null) {
+            System.out.println("\nlibro eliminado correctamente");
         }
 
-        System.out.println("\nsimulando prestamos:");
-        Book foundBook = library.findBookByIsbn("978-84-376-0494-7");
-        if (foundBook != null && foundBook.lend()) {
-            System.out.println("se presto: " + foundBook.getTitle());
-        }
-
-        foundBook = library.findBookByIsbn("978-84-376-0495-4");
-        if (foundBook != null && foundBook.lend()) {
-            System.out.println("se presto: " + foundBook.getTitle());
-        }
-
-        System.out.println("\nlibros disponibles:");
-        LinkedList<Book> available = library.getAvailableBooks();
-        for (int i = 0; i < available.size(); i++) {
-            System.out.println("  - " + available.get(i));
-        }
-
-        System.out.println("\nlibros prestados:");
-        LinkedList<Book> loaned = library.getLoanedBooks();
-        for (int i = 0; i < loaned.size(); i++) {
-            System.out.println("  - " + loaned.get(i));
-        }
-
-        System.out.println("\nestadisticas finales:");
-        System.out.println(library.getStatistics());
-
-        System.out.println("\ndemostracion completada.");
+        bib.getBooks().clear();
+        System.out.println("lista vaciada. size: " + bib.getBooks().size());
+        
+        System.out.println("\npruebas finalizadas.");
     }
 }

@@ -23,7 +23,7 @@ public class LinkedList<T> {
 
     public T get(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("index: " + index + ", size: " + size);
+            return null;
         }
         Node<T> current = head;
         for (int i = 0; i < index; i++) {
@@ -33,8 +33,7 @@ public class LinkedList<T> {
     }
 
     public boolean remove(T data) {
-        if (head == null)
-            return false;
+        if (head == null) return false;
 
         if (head.getData() != null && head.getData().equals(data)) {
             head = head.getNext();
@@ -76,12 +75,10 @@ public class LinkedList<T> {
 
     public int size() {
         return size;
-    }   
-    
+    }
+
     public T obtenerUltimo() {
-        if (head == null) {
-            return null;
-        }
+        if (head == null) return null;
         Node<T> current = head;
         while (current.getNext() != null) {
             current = current.getNext();
@@ -90,9 +87,7 @@ public class LinkedList<T> {
     }
 
     public T eliminarUltimo() {
-        if (head == null) {
-            return null;
-        }
+        if (head == null) return null;
 
         if (head.getNext() == null) {
             T data = head.getData();
@@ -108,6 +103,15 @@ public class LinkedList<T> {
 
         T data = current.getNext().getData();
         current.setNext(null);
+        size--;
+        return data;
+    }
+
+    public T eliminarPrimero() {
+        if (head == null) return null;
+        
+        T data = head.getData();
+        head = head.getNext();
         size--;
         return data;
     }

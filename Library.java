@@ -1,4 +1,3 @@
-
 public class Library {
     private String name;
     private LinkedList<Book> books;
@@ -10,17 +9,9 @@ public class Library {
         this.authors = new LinkedList<>();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public LinkedList<Book> getBooks() {
-        return books;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getName() { return name; }
+    public LinkedList<Book> getBooks() { return books; }
+    public void setName(String name) { this.name = name; }
 
     public boolean addBook(Book book) {
         if (book != null) {
@@ -45,22 +36,11 @@ public class Library {
     public Book findBookByIsbn(String isbn) {
         for (int i = 0; i < books.size(); i++) {
             Book book = books.get(i);
-            if (book.getIsbn().equals(isbn)) {
+            if (book != null && book.getIsbn().equals(isbn)) {
                 return book;
             }
         }
         return null;
-    }
-
-    public LinkedList<Book> findBookByDescription(String title) {
-        LinkedList<Book> foundBooks = new LinkedList<>();
-        for (int i = 0; i < books.size(); i++) {
-            Book book = books.get(i);
-            if (book.getTitle().contains(title)) {
-                foundBooks.add(book);
-            }
-        }
-        return foundBooks;
     }
 
     public LinkedList<Book> findBooksByTitle(String title) {
@@ -120,11 +100,7 @@ public class Library {
             }
         }
 
-        return String.format(
-                "estadísticas de la biblioteca:\n" +
-                        "- total de libros: %d\n" +
-                        "- libros disponibles: %d\n" +
-                        "- libros prestados: %d\n",
+        return String.format("total: %d | disponibles: %d | prestados: %d",
                 totalBooks, availableBooks, loanedBooks);
     }
 
